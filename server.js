@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db.js");
+const errorHandler = require("./middlware/error.js");
 dotenv.config({ path: "./config/config.env" });
 
 // CONFIG
@@ -21,6 +22,8 @@ app.use(express.json());
 
 // Route files
 app.use("/api/v1/bootcamps", bootcamps);
+
+app.use(errorHandler);
 
 // dev loggin middleware
 if (process.env.NODE_ENV === "development") {
