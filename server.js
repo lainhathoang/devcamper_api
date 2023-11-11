@@ -4,11 +4,11 @@ const morgan = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db.js");
 const errorHandler = require("./middlware/error.js");
-dotenv.config({ path: "./config/config.env" });
-
-// CONFIG
 // load env
+dotenv.config({ path: "./config/config.env" });
+// CONFIG routes
 const bootcamps = require("./routes/bootcamps.js");
+const courses = require("./routes/courses.js");
 // connect to db
 connectDB();
 // PORT config
@@ -22,6 +22,7 @@ app.use(express.json());
 
 // Route files
 app.use("/api/v1/bootcamps", bootcamps);
+app.use("/api/v1/courses", courses);
 
 app.use(errorHandler);
 
