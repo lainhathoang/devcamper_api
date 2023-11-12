@@ -1,7 +1,9 @@
+const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const fileupload = require("express-fileupload");
 const connectDB = require("./config/db.js");
 const errorHandler = require("./middlware/error.js");
 // load env
@@ -9,6 +11,7 @@ dotenv.config({ path: "./config/config.env" });
 // CONFIG routes
 const bootcamps = require("./routes/bootcamps.js");
 const courses = require("./routes/courses.js");
+const logger = require("./middlware/logger.js");
 // connect to db
 connectDB();
 // PORT config
@@ -19,6 +22,11 @@ const app = express();
 
 // body parser
 app.use(express.json());
+// file uploading
+app.use(fileupload());
+
+// Set static folder
+app.use(express.static(path.join(__dirname, "public")));
 
 // Route files
 app.use("/api/v1/bootcamps", bootcamps);

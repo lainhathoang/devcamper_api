@@ -6,7 +6,11 @@ const {
   updateBootcamp,
   deleteBootcamp,
   getBootcampWithinRadius,
+  bootcampPhotoUpload,
 } = require("../controllers/bootcamps.js");
+
+const Bootcamp = require("../models/Bootcamp.js");
+const advancedResults = require("../middlware/advancedResults.js");
 
 // include other resourse router
 const coursesRouter = require("./courses.js");
@@ -17,7 +21,10 @@ const router = express.Router();
 router.use("/:bootcampId/courses", coursesRouter);
 
 // no need ID
-router.route("/").get(getBootcamps).post(createBootcamp);
+router
+  .route("/")
+  .get(advancedResults(Bootcamp, "courses"), getBootcamps)
+  .post(createBootcamp);
 
 // need ID
 router
@@ -28,5 +35,8 @@ router
 
 //
 router.route("/radius/:zipcode/:distance").get(getBootcampWithinRadius);
+
+//
+router.route("/:id/photo").put(bootcampPhotoUpload);
 
 module.exports = router;
