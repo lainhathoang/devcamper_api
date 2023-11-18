@@ -108,7 +108,8 @@ const BootcampSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
+
 );
 
 // Create bootcamp slug from the name

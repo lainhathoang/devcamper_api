@@ -30,18 +30,23 @@ const CourseSchema = new mongoose.Schema({
     ref: "Bootcamp",
     required: true,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 // Static method to get avg of course tuitions
-CourseSchema.statics.getAverageCost = async function (bootcampId) {
+CourseSchema.statics.getAverageCost = async function(bootcampId) {
   const obj = await this.aggregate([
     {
-      $match: { bootcamp: bootcampId },
+      $match: {bootcamp: bootcampId},
     },
     {
       $group: {
         _id: "$bootcamp",
-        averageCost: { $avg: "$tuition" },
+        averageCost: {$avg: "$tuition"},
       },
     },
   ]);
@@ -57,13 +62,13 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
 };
 
 // Call getAverageCost after save
-CourseSchema.post("save", function () {
+CourseSchema.post("save", function() {
   this.constructor.getAverageCost(this.bootcamp);
 });
 
 // Call getAverageCost after/post remove
 //??????
-CourseSchema.post("deleteOne", { document: true, query: false }, function () {
+CourseSchema.post("deleteOne", {document: true, query: false}, function() {
   this.constructor.getAverageCost(this.bootcamp);
 });
 

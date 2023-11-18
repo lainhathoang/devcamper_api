@@ -6,8 +6,9 @@ const errorHandler = (err, req, res, next) => {
 //   console.log("1. ", err.errors);
   error.message = err.message; // append them message vi error chua copy dc message
   //   console.log("1.1 ", error);
-  console.log(err);
-  console.log(error);
+
+  // console.log(err);
+  // console.log(error);
 
   // log to console for dev
   //   console.log(err.stack.red);
