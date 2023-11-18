@@ -9,6 +9,7 @@ const Bootcamp = require("../models/Bootcamp.js");
 // @access      Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
+  // return next(new ErrorResponse(`deo co loi`, 400));
 });
 
 // @desc        Get a bootcamp
@@ -20,11 +21,11 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
   // Mongoose bad ObjectId
   if (!bootcamp) {
     return next(
-      new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404)
+        new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404),
     );
   }
 
-  res.status(200).json({ success: true, data: bootcamp });
+  res.status(200).json({success: true, data: bootcamp});
 });
 
 // @desc        Create a bootcamp
@@ -33,7 +34,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
   // only add the fileds in the Schema
   const bootcamp = await Bootcamp.create(req.body);
-  res.status(201).json({ success: true, data: bootcamp });
+  res.status(201).json({success: true, data: bootcamp});
 });
 
 // @desc        Update a bootcamp
@@ -47,11 +48,11 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 
   if (!bootcamp) {
     return next(
-      new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404)
+        new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404),
     );
   }
 
-  res.status(200).json({ success: true, data: bootcamp });
+  res.status(200).json({success: true, data: bootcamp});
 });
 
 // @desc        Delete a bootcamp
@@ -62,20 +63,20 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
   if (!bootcamp) {
     return next(
-      new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404)
+        new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404),
     );
   }
 
   await bootcamp.deleteOne();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({success: true, data: {}});
 });
 
 // @desc        Get a bootcamp within radius
 // @route       GET /api/v1/bootcamps/radius/:zipcode/:distance
 // @access      Private
 exports.getBootcampWithinRadius = asyncHandler(async (req, res, next) => {
-  const { zipcode, distance } = req.params;
+  const {zipcode, distance} = req.params;
 
   // Get lat/long from geocoder
   const loc = await geocoder.geocode(zipcode);
@@ -89,7 +90,7 @@ exports.getBootcampWithinRadius = asyncHandler(async (req, res, next) => {
 
   const bootcamps = await Bootcamp.find({
     location: {
-      $geoWithin: { $centerSphere: [[lng, lat], radius] },
+      $geoWithin: {$centerSphere: [[lng, lat], radius]},
     },
   });
 
@@ -108,7 +109,7 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
 
   if (!bootcamp) {
     return next(
-      new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404)
+        new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404),
     );
   }
 
@@ -127,10 +128,10 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
   // Check file size
   if (file.size > process.env.FILE_UPLOAD_PATH) {
     return next(
-      new ErrorResponse(
-        `Please upload an image less than ${process.env.FILE_UPLOAD_PATH}`,
-        400
-      )
+        new ErrorResponse(
+            `Please upload an image less than ${process.env.FILE_UPLOAD_PATH}`,
+            400,
+        ),
     );
   }
 
@@ -144,8 +145,8 @@ exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Problem with file upload`, 500));
     }
     // update the file.name
-    await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name });
+    await Bootcamp.findByIdAndUpdate(req.params.id, {photo: file.name});
 
-    res.status(200).json({ success: true, data: file.name });
+    res.status(200).json({success: true, data: file.name});
   });
 });
