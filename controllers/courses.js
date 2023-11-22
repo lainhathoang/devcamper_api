@@ -6,7 +6,7 @@ const Bootcamp = require("../models/Bootcamp.js");
 
 // @desc        Get all courses
 // @route       GET /api/v1/courses
-// @route       GET /api/v1/bootcamps/:bootcampsId/courses
+// @route       GET /api/v1/bootcamps/:bootcampId/courses
 // @access      Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
   let query;
@@ -57,7 +57,7 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
-  // check if the course if existed
+  // check if the bootcamp if existed
   if (!bootcamp) {
     return next(
         new ErrorResponse(

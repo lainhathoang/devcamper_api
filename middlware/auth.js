@@ -9,11 +9,13 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   if (req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")) {
+    // set token from Bearer token
     token = req.headers.authorization.split(" ")[1];
   }
-  // else if (req.cookies.token) {
-  //   token = req.cookies.token;
-  // }
+  // set token from cookie
+  else if (req.cookies.token) {
+    token = req.cookies.token;
+  }
 
   // Make sure token exists
   if (!token) {
@@ -24,6 +26,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // Verify token (token co chua id cua nguoi dung)
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // add user to req (forward to the next middleware)
     req.user = await User.findById(decoded.id);
 
     next();

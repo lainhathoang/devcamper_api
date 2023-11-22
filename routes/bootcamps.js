@@ -10,17 +10,19 @@ const {
 } = require("../controllers/bootcamps.js");
 
 const Bootcamp = require("../models/Bootcamp.js");
-const advancedResults = require("../middlware/advancedResults.js");
 
 // include other resourse router
 const coursesRouter = require("./courses.js");
+const reviewsRouter = require("./reviews.js");
 
 const router = express.Router();
 
+const advancedResults = require("../middlware/advancedResults.js");
 const {protect, authorize} = require("../middlware/auth.js");
 
 // re-route into other resource routers
 router.use("/:bootcampId/courses", coursesRouter);
+router.use("/:bootcampId/reviews", reviewsRouter);
 
 // no need ID
 router.route("/").
@@ -34,7 +36,8 @@ router.route("/:id").
     delete(protect, authorize("publisher", "admin"), deleteBootcamp);
 
 //
-router.route("/:id/photo").put(protect, authorize("publisher", "admin"), bootcampPhotoUpload);
+router.route("/:id/photo").
+    put(protect, authorize("publisher", "admin"), bootcampPhotoUpload);
 
 //
 router.route("/radius/:zipcode/:distance").get(getBootcampWithinRadius);

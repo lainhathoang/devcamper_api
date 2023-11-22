@@ -33,7 +33,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @route       POST /api/v1/bootcamps
 // @access      Public
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
-  // Add user to req.body
+  // Add user'id to req.body
   req.body.user = req.user.id;
 
   // Check for published bootcamp (1 bootcamp / publisher)
